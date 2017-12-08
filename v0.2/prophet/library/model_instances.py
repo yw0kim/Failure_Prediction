@@ -4,10 +4,9 @@ import sys
 import os
 import pandas as pd
 
-
-SOURCE_ROOT = os.path.join("/", "root", "Failure_Prediction", "v0.1")
-sys.path.insert(0, os.path.join(SOURCE_ROOT, "library", "data_transform"))
+sys.path.insert(0, os.path.join("./", "library", "data_transform"))
 import data_transform as dt
+
 model_tbl_path = os.path.join(SOURCE_ROOT, "MODEL_TBL.csv")
 module_dirpaths = []
 
