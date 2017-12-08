@@ -26,6 +26,7 @@ class ML_Process :
         self.model_num = int(config['ML_Process']['model_num'])
         self.model_name_list = config['ML_Process']['model_names'] \
                                 .replace(' ','').split(',')
+
         ''' 
         for section, entries in config.items() : # read each config section and get model class instance
             try :
