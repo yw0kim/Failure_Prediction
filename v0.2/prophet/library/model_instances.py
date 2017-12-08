@@ -12,7 +12,7 @@ ml_tbl_path = os.path.join(".", "library", "ML_TBL.csv")
 pd_ml_tbl = pd.read_csv(ml_tbl_path)
 module_dirpaths = []   # save each module's import path
 
-module_obj_dict = dict()
+class_dict = dict()
 for index, row in pd_ml_tbl.iterrows():
     module_path = os.path.join(FAILURE_PREDICTION_PATH, row['MODULE_PATH'])
     # get module name
@@ -25,10 +25,10 @@ for index, row in pd_ml_tbl.iterrows():
         sys.path.insert(0, module_dirpath)
 
     # import module
-    module_instance = __import__(module_name)
-    module_obj_dict[row['ML_NAME']] = getattr(module_instance, row['CLASS_NAME'])
-
-print(module_obj_dict)
-
+    module = __import__(module_name)
+    class_dict[row['ML_NAME']] = getattr(module, row['CLASS_NAME'])  # get class of module
+    # ex) class_dict = "{'ANN': <class 'ann.ANN'>, 'K_Means': <class 'k_means.K_Means'>}"
+    
+print(class_dict)
 
 #dt_func_cls = dt.Data_transform()

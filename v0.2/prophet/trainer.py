@@ -12,10 +12,10 @@ class Trainer(ml_process.ML_Process):
         super().__init__()
 
     def main(self):
-        '''
+        
         self.config()
 
-        
+        '''
         for model_order in MODEL_ORDER:
             operations = self.train_oper_dict[model_order]
             model = self.model_dict[model_order]

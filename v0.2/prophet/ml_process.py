@@ -26,20 +26,20 @@ class ML_Process :
         self.model_num = int(config['ML_Process']['model_num'])
         self.model_name_list = config['ML_Process']['model_names'] \
                                 .replace(' ','').split(',')
-
+        ''' 
         for section, entries in config.items() : # read each config section and get model class instance
             try :
                 if section.split('_')[1] == 'MODEL' and entries['enable'] == 'true':
                     # print(items['model_name'])
-                    model = models.class_obj_dict[entries['model_name']]()      # get class instance
+                    model = model_instances.class_dict[entries['ML_NAME']]()      # get class instance
                     model.set_config(arg_dict = entries)
                     self.model_dict[section.lower()] = model
                     # when the model written in config file doesn't exist, exception process is needed.
 
             except IndexError:
                 pass
-        '''
-
+        
+        
         predict_operations_list = config['Predict_operations']['predict_operations'] \
                                     .replace(' ', '').split(',')
         for oper in predict_operations_list:
