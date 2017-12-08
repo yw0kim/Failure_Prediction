@@ -1,7 +1,7 @@
 import os
 import random
 import sys
-from model import Model
+from base_ml import Machine_Learning
 
 import numpy as np
 import tensorflow as tf 
@@ -11,7 +11,7 @@ import set_output_dir
 import constant as ct
 
 
-class K_Means(Model):
+class K_Means(Machine_Learning):
     def __init__(self):
         self.model_name = ct.KMEANS_MODEL_NAME
         self.model_dir = ct.KMEANS_MODEL_DIR

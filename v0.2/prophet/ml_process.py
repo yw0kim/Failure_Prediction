@@ -1,41 +1,44 @@
 #!/bin/python3
 #-*- coding:utf-8 -*-
 
+from library import model_instances
 import configparser as cp
-import library
 import operation as op
 
 from abc import abstractmethod
 
+g_config_filename = 'config'
+
 class ML_Process :
-    def __init__(self, config_fname='config'):
+    def __init__(self):
         self.model_num = 0
         self.model_dict = {}
         self.model_name_list = []
-        self.cfg_name = config_fname
+        #self.cfg_fname
         self.predict_oper_list = [] # contain operation units
         self.train_oper_dict = {}   # key : first_model, second_model, .... value : operation unit list
 
     # config reads the config file and config
-    # Configuration item will be what you use algorithm and data_transform...
-    def config(self, config_fname='config'):
+    # Configuration item will be what you use. such as algorithm and data_transform...
+    def config(self, cfg_fname=g_config_filename):
         config = cp.ConfigParser()
-        config.read(config_fname)
+        config.read(cfg_fname)
         self.model_num = int(config['ML_Process']['model_num'])
         self.model_name_list = config['ML_Process']['model_names'] \
                                 .replace(' ','').split(',')
 
-        for section, entries in config.items() : # get model instance
+        for section, entries in config.items() : # read each config section and get model class instance
             try :
                 if section.split('_')[1] == 'MODEL' and entries['enable'] == 'true':
                     # print(items['model_name'])
-                    model = library.class_obj_dict[entries['model_name']]()
+                    model = models.class_obj_dict[entries['model_name']]()      # get class instance
                     model.set_config(arg_dict = entries)
                     self.model_dict[section.lower()] = model
-                    # config 파일에 적힌 모델이 없는 경우에 대한 예외 처리 필요
+                    # when the model written in config file doesn't exist, exception process is needed.
 
             except IndexError:
                 pass
+        '''
 
         predict_operations_list = config['Predict_operations']['predict_operations'] \
                                     .replace(' ', '').split(',')
@@ -50,6 +53,7 @@ class ML_Process :
                 self.train_oper_dict[model_order].append(op.operation_unit(oper))
 
         self.print_config_all()
+        '''
 
     def print_config_all(self):
         print("------------------------------------")

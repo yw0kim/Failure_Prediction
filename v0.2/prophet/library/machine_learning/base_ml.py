@@ -1,23 +1,23 @@
 import sys
-sys.path.insert(0, '..')
+#sys.path.insert(0, '..')
 import os
 from abc import ABC, abstractmethod
-from eval_info import *
+#from eval_info import *
 
 # abstract class to be used by machine learning class
-class Model(ABC):
+class Machine_Learning(ABC):
     # db = Database()
     # input_x = Dataframe()
     # input_y = Dataframe()
-    ev_inf = Eval_info() 
+    # ev_inf = Eval_info() 
 
     @abstractmethod
     def __init__(self):
-        self.model_name =''
+        self.ml_name =''
         self.arg_dict = {}
 
     @abstractmethod
-    def create_model(self):
+    def create_ml(self):
         pass
     
     @abstractmethod
@@ -33,19 +33,19 @@ class Model(ABC):
         pass
     
     @staticmethod
-    def print_model_config(model_name, arg_dict):
+    def print_config(ml_name, arg_dict):
         print("------------------------------------")
-        print("Model [%s] configuration information" % model_name)
+        print("Machine_Learning [%s] configuration information" % ml_name)
         for key in arg_dict.keys():
             print("[%s] : %s" % (key, arg_dict.get(key)))
         print("------------------------------------")
 
     @staticmethod
-    def print_config_all(model_list) :
+    def print_config_all(ml_list) :
         print("Configuration information")
-        print("The Number of Models : %d" % len(model_list))
-        for model in model_list :
-            model.print_model_config(model.model_name, model.arg_dict)
+        print("The Number of Machine_Learnings : %d" % len(ml_list))
+        for ml in ml_list :
+            ml.print_config(ml.ml_name, ml.arg_dict)
 
     @staticmethod
     def set_config(self, arg_dict):
@@ -62,5 +62,5 @@ class Model(ABC):
         self.y = y
 
     @staticmethod
-    def set_model_sequence(self, model_sequence):
-        self.model_sequence = model_sequence
+    def set_ml_sequence(self, ml_sequence):
+        self.ml_sequence = ml_sequence

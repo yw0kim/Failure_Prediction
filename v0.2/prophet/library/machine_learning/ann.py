@@ -1,15 +1,19 @@
 import sys
-sys.path.insert(0, '../data_transform')
+import os
+#sys.path.insert(0, '../data_transform')
 import tensorflow as tf
 import numpy as np
 
-from model import *
-import make_input
+from base_ml import Machine_Learning
+FAILURE_PREDICTION_PATH = os.environ['FAILURE_PREDICTION']
+sys.path.insert(0, os.path.join(FAILURE_PREDICTION_PATH, "library")) # upper directory
+import data_prepare.data_transform
+import make_batch
 import set_output_dir
-import constant as ct
-import data_transform
 
-class ANN(Model):
+import constant as ct
+
+class ANN(Machine_Learning):
 
     def __init__(self):
         self.model_name = ct.ANN_MODEL_NAME

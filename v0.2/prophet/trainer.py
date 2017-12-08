@@ -2,6 +2,7 @@
 
 import ml_process
 
+
 MODEL_ORDER = ['first_model', 'second_model', 'third_model', 'fourth_model']
 # train_oper_dict is dictionary
 # dict cannot iterate by order. So we use MODEL_ORDER list.
@@ -11,9 +12,10 @@ class Trainer(ml_process.ML_Process):
         super().__init__()
 
     def main(self):
+        '''
         self.config()
 
-    '''
+        
         for model_order in MODEL_ORDER:
             operations = self.train_oper_dict[model_order]
             model = self.model_dict[model_order]
@@ -35,9 +37,9 @@ class Trainer(ml_process.ML_Process):
                     pass
                 else:
                     print("Operation Type is Wrong!!!. Type %s" % oper_type)
-    '''
-            #graph = tf.Graph()
-
+    
+            # graph = tf.Graph()
+        '''
         #for i -> n
         #self.model_list[i].train_operations
 
