@@ -5,12 +5,12 @@
 # ======================================================== #
 # ML_Process sections apply to trainer and predictor.
 # It can use more than one algorithm.
-# model_name must be model class name
+# ml_name must be machine learning class name
 # dir_project means root dir that contain input and output dir
 # dir input means root dir that contain input data
 [ML_Process]
-model_num = 2
-model_names = K_Means, ANN
+ml_num = 2
+ml_names = K_Means, ANN
 window_size = 10
 dir_project = ./FP_project
 dir_input = input
@@ -22,34 +22,34 @@ collect_port =
 # Each algorithm has different parameters.
 # Each section contains the data transform functions that will 
 # work before the algorithm is executed.
-# Each session defines parameters for the models to be run.
-# The model name is either the name of the model supported
-# by the framework or the name of the model you have implemented.
-# At this time, the name of the model must be the same as
-# the class name of the implemented model.
+# Each session defines parameters for the machine learnings to be run.
+# The machine learning name is either the name of the machine learning supported
+# by the framework or the name of the machine learning you have implemented.
+# At this time, the name of the machine learning must be the same as
+# the class name of the implemented machine learning.
 #
-# The parameters may vary depending on the model.
+# The parameters may vary depending on the machine learning.
 # At the bottom of this sections there are the default parameter
-# settings for each model. You must use or modify it.
+# settings for each machine learning. You must use or modify it.
 #
 # Each session refers to the order that will be used to learn
-# and run the models that will work in the framework.
-# If you are using two models, set the enable entry
+# and run the machine learnings that will work in the framework.
+# If you are using two machine learnings, set the enable entry
 # in the FIRST_MODEL and SECOND_MODEL sections to true
 # and set the rest to false.
 
-[FIRST_MODEL]
+[FIRST_ML]
 enable = true
-model_name = K_Means
-model_dir = K_Means
+ml_name = K_Means
+ml_dir = K_Means
 num_centroids = 4
 max_iters = 1000
 trained_centroid_file = centriod.csv
 
-[SECOND_MODEL]
+[SECOND_ML]
 enable = true
-model_name = ANN
-model_dir = ANN
+ml_name = ANN
+ml_dir = ANN
 num_nodes = "10,7"
 dropout_keep_prob = 0.5
 l2_reg_lambda = 0.0
@@ -58,16 +58,16 @@ batch_size = 32
 num_epochs = 2
 validation_interval = 2000
 
-[THIRD_MODEL]
+[THIRD_ML]
 enable = false
-model_name = model1
+ml_name = ml1
 param1 = 122
 param2 = parazz
 param3 = 2222
 
-[FOURTH_MODEL]
+[FOURTH_ML]
 enable = false
-model_name =
+ml_name =
 arg1 =
 arg2 =
 
@@ -136,21 +136,21 @@ arg2 =
 # 'TO' : Output path when train
 # 'PO' : Output path when predict
 # 'DT' : Data transform method
-# 'T'  : Train model
-# 'R'  : Run model (Predict)
+# 'T'  : Train machine learning
+# 'R'  : Run machine learning (Predict)
 
 [predict_operations]
 # predict data source can be pipe...
-first_model = TI:"train_data", T:"first_model", M:"transpose", TO:"output_path"
-second_model = TI:"train_data", M:"deduplicates":"1":"3", R:"first_model", T:"second_model", M:"transpose"
-third_model =
-fourth_model =
-predict_operations = PI:"predict_data", DT:"deduplicates":"1":"2", R:"first_model", DT:"1col_del", R:"second_model"
+first_ml = TI:"train_data", T:"first_ml", M:"transpose", TO:"output_path"
+second_ml = TI:"train_data", M:"deduplicates":"1":"3", R:"first_ml", T:"second_ml", M:"transpose"
+third_ml =
+fourth_ml =
+predict_operations = PI:"predict_data", DT:"deduplicates":"1":"2", R:"first_ml", DT:"1col_del", R:"second_ml"
 
 [Train_operations]
-first_model = TI:"train_data", T:"first_model", M:"transpose", TO:"output_path"
-second_model = TI:"train_data", M:"deduplicates":"1":"3", R:"first_model", T:"second_model", M:"transpose"
-third_model =
-fourth_model =
+first_ml = TI:"train_data", T:"first_ml", M:"transpose", TO:"output_path"
+second_ml = TI:"train_data", M:"deduplicates":"1":"3", R:"first_ml", T:"second_ml", M:"transpose"
+third_ml =
+fourth_ml =
 
 

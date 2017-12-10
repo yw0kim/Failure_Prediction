@@ -1,7 +1,11 @@
 #!/bin/python3
 #-*- coding:utf-8 -*-
 
-from library import model_instances
+import os
+import sys
+FAILURE_PREDICTION_PATH = os.environ['FAILURE_PREDICTION']
+sys.path.insert(0, FAILURE_PREDICTION_PATH) # upper directory
+from library import get_classes
 import configparser as cp
 import operation as op
 
@@ -11,36 +15,37 @@ g_config_filename = 'config'
 
 class ML_Process :
     def __init__(self):
-        self.model_num = 0
-        self.model_dict = {}
-        self.model_name_list = []
+        self.ml_num = 0
+        self.ml_instance_dict = dict()
+        self.ml_name_list = []
         #self.cfg_fname
         self.predict_oper_list = [] # contain operation units
-        self.train_oper_dict = {}   # key : first_model, second_model, .... value : operation unit list
+        self.train_oper_dict = {}   # key : first_ml, second_ml, .... value : operation unit list
 
     # config reads the config file and config
     # Configuration item will be what you use. such as algorithm and data_transform...
     def config(self, cfg_fname=g_config_filename):
         config = cp.ConfigParser()
         config.read(cfg_fname)
-        self.model_num = int(config['ML_Process']['model_num'])
-        self.model_name_list = config['ML_Process']['model_names'] \
+        self.model_num = int(config['ML_Process']['ml_num'])
+        self.model_name_list = config['ML_Process']['ml_names'] \
                                 .replace(' ','').split(',')
 
-        ''' 
-        for section, entries in config.items() : # read each config section and get model class instance
+        
+        for section, entries in config.items() : # every config section get machine learning class instance
             try :
-                if section.split('_')[1] == 'MODEL' and entries['enable'] == 'true':
+                if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
                     # print(items['model_name'])
-                    model = model_instances.class_dict[entries['ML_NAME']]()      # get class instance
-                    model.set_config(arg_dict = entries)
-                    self.model_dict[section.lower()] = model
+                    ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
+                    ml_instance.set_config(ml_instance, arg_dict = entries)
+                    print(section)
+                    self.ml_instance_dict[section.lower()] = ml_instance    # section.lower() = first_ml, second_ml, ...
                     # when the model written in config file doesn't exist, exception process is needed.
 
             except IndexError:
                 pass
         
-        
+        '''
         predict_operations_list = config['Predict_operations']['predict_operations'] \
                                     .replace(' ', '').split(',')
         for oper in predict_operations_list:

@@ -25,7 +25,7 @@ class K_Means(Machine_Learning):
         self.centroid_num = ct.KMEANS_CENTROID_NUM
         self.max_iters = ct.KMEANS_MAX_ITERS
 
-    def create_model(self):
+    def create_ml(self):
         self.model_dir = str(self.model_sequence) + '_' + self.model_dir
         # make output directory
         self.dirpath_trained_model, self.dirpath_summary_train, self.dirpath_summary_validation = set_output_dir.make_dir(self.model_dir, self.project_dirpath)

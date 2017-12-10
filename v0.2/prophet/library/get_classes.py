@@ -27,8 +27,21 @@ for index, row in pd_ml_tbl.iterrows():
     # import module
     module = __import__(module_name)
     class_dict[row['ML_NAME']] = getattr(module, row['CLASS_NAME'])  # get class of module
-    # ex) class_dict = "{'ANN': <class 'ann.ANN'>, 'K_Means': <class 'k_means.K_Means'>}"
-    
-print(class_dict)
+    # ex) class_dict = "{'ANN': <class 'ann.ANN'>, 'K_Means': <class 'k_means.K_Means'>}"   
+#print(class_dict)
+
+'''
+for section, entries in config.items() : # read each config section and get model class instance
+    try :
+        if section.split('_')[1] == 'MODEL' and entries['enable'] == 'true':
+        # print(items['model_name'])
+        model = model_instances.class_dict[entries['ML_NAME']]()      # get class instance
+        model.set_config(arg_dict = entries)
+        self.model_dict[section.lower()] = model
+        # when the model written in config file doesn't exist, exception process is needed.
+
+    except IndexError:
+        pass
+'''
 
 #dt_func_cls = dt.Data_transform()

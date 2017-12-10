@@ -34,7 +34,7 @@ class ANN(Machine_Learning):
         self.y_type_num = None
         self.y_type_num = 2
 
-    def create_model(self):
+    def create_ml(self):
         dt = data_transform.Data_transform()
         self.x = np.array(self.x)
         self.y = dt._make_node_y_input(self.y, self.y_type_num)
