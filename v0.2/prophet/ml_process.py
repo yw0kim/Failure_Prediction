@@ -15,38 +15,81 @@ g_config_filename = 'config'
 
 class ML_Process :
     def __init__(self):
-        self.ml_num = 0
-        self.ml_instance_dict = dict()
-        self.ml_name_list = []
-        #self.cfg_fname
-        self.predict_oper_list = [] # contain operation units
-        self.train_oper_dict = {}   # key : first_ml, second_ml, .... value : operation unit list
+#        self.ml_num = 0
+#        self.ml_name_list = []
+#        self.ml_instance_dict = dict()
+#        self.train_oper_dict = dict()   # key : first_ml, second_ml, .... value : operation unit list
+        self.predict_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list 
 
     # config reads the config file and config
     # Configuration item will be what you use. such as algorithm and data_transform...
-    def config(self, cfg_fname=g_config_filename):
+    def get_train_config(self, cfg_fname=g_config_filename):
+        ml_instance_dict = dict()
+        ml_name_list = []
+        train_oper_dict = dict()   # key : first_ml, second_ml, .... value : operation unit list
+        predict_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list 
         config = cp.ConfigParser()
         config.read(cfg_fname)
-        self.model_num = int(config['ML_Process']['ml_num'])
-        self.model_name_list = config['ML_Process']['ml_names'] \
-                                .replace(' ','').split(',')
+#        self.ml_num = int(config['ML_Process']['ml_num'])
+#        self.ml_name_list = config['ML_Process']['ml_names'] \
+#                                .replace(' ','').split(',')
 
-        
-        for section, entries in config.items() : # every config section get machine learning class instance
+        # every ml config section gets machine learning class instance
+        for section, entries in config.items() : 
             try :
                 if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
                     # print(items['model_name'])
                     ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
                     ml_instance.set_config(ml_instance, arg_dict = entries)
-                    print(section)
-                    self.ml_instance_dict[section.lower()] = ml_instance    # section.lower() = first_ml, second_ml, ...
-                    # when the model written in config file doesn't exist, exception process is needed.
-
+                    ml_instance_dict[section.lower()] = ml_instance    # section.lower() = first_ml, second_ml, ...
+            # when the machine learning written in config file doesn't exist, exception process is needed.
             except IndexError:
                 pass
-        
+
+        # get train_operations assing func as according to their type
+        train_operations_dict = config['Train_Operations'] # key:first_ml ; value:I:"", T, O:"" ...
+        for ml_order, train_operations_str in train_operations_dict.items():
+            train_operations_list = train_operations_str.replace(' ', '').split(',')
+            train_oper_dict[ml_order] = []
+            for oper in train_operations_list:
+                train_oper_dict[ml_order].append(op.operation_unit(oper))
+        return (ml_instance_dict, train_oper_dict)
+
+    # config reads the config file and config
+    # Configuration item will be what you use. such as algorithm and data_transform...
+    def get_predict_config(self, cfg_fname=g_config_filename):
+        ml_instance_dict = dict()
+        ml_name_list = []
+        train_oper_dict = dict()   # key : first_ml, second_ml, .... value : operation unit list
+        predict_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list 
+        config = cp.ConfigParser()
+        config.read(cfg_fname)
+#        self.ml_num = int(config['ML_Process']['ml_num'])
+#        self.ml_name_list = config['ML_Process']['ml_names'] \
+#                                .replace(' ','').split(',')
+
+        # every ml config section gets machine learning class instance
+        for section, entries in config.items() : 
+            try :
+                if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
+                    # print(items['model_name'])
+                    ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
+                    ml_instance.set_config(ml_instance, arg_dict = entries)
+                    ml_instance_dict[section.lower()] = ml_instance    # section.lower() = first_ml, second_ml, ...
+            # when the machine learning written in config file doesn't exist, exception process is needed.
+            except IndexError:
+                pass
+
+        # get predict_operations assing func as according to their type
+        predict_operations_dict = config['Predict_Operations'] # key:first_ml ; value:I:"", T, O:"" ...
+        for ml_order, predict_operations_str in predict_operations_dict.items():
+            predict_operations_list = predict_operations_str.replace(' ', '').split(',')
+            predict_oper_dict[ml_order] = []
+            for oper in predict_operations_list:
+                predict_oper_dict[ml_order].append(op.operation_unit(oper))
+        return (ml_instance_dict, predict_oper_dict)
         '''
-        predict_operations_list = config['Predict_operations']['predict_operations'] \
+        predict_operations_list = config['predict_operations']['predict_operations'] \
                                     .replace(' ', '').split(',')
         for oper in predict_operations_list:
             self.predict_oper_list.append(op.operation_unit(oper))

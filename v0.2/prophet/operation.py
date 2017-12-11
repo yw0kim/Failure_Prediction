@@ -22,7 +22,7 @@ class operation_unit :
             self.predict_output_path = split_opers[1].split('"')[1]
             self.execute_oper_func = self.oper_PO_type
         elif self.oper_type == 'T':
-            self.train_model = split_opers[1].split('"')[1]
+#            self.train_model = split_opers[1].split('"')[1]
             self.execute_oper_func = self.oper_T_type
         elif self.oper_type == 'R':
             self.run_model = split_opers[1].split('"')[1]
