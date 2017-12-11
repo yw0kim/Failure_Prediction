@@ -25,7 +25,7 @@ class ML_Process :
     # Configuration item will be what you use. such as algorithm and data_transform...
     def get_train_instance_operation(self, cfg_fname=g_config_filename):
         ml_instance_dict = dict()
-        ml_name_list = []
+        ml_enable_list = []
         train_oper_dict = dict()   # key : first_ml, second_ml, .... value : operation unit list
         config = cp.ConfigParser()
         config.read(cfg_fname)
@@ -37,7 +37,7 @@ class ML_Process :
         for section, entries in config.items() : 
             try :
                 if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
-                    # print(items['model_name'])
+                    ml_enable_list.append(section.lower())
                     ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
                     ml_instance.set_config(ml_instance, arg_dict = entries)
                     ml_instance_dict[section.lower()] = ml_instance    # section.lower() = 1st_ML, 2nd_ML, ...
@@ -48,17 +48,18 @@ class ML_Process :
         # get train_operations assing func as according to their type
         train_operations_dict = config['Train_Operations'] # key:first_ml ; value:I:"", T, O:"" ...
         for ml_order, train_operations_str in train_operations_dict.items():
-            train_operations_list = train_operations_str.replace(' ', '').split(',')
-            train_oper_dict[ml_order.lower()] = []
-            for oper in train_operations_list:
-                train_oper_dict[ml_order.lower()].append(op.operation_unit(oper))   # set each operation and input path as operation_unit
+            if ml_order in ml_enable_list:
+                train_operations_list = train_operations_str.replace(' ', '').split(',')
+                train_oper_dict[ml_order.lower()] = []
+                for oper in train_operations_list:
+                    train_oper_dict[ml_order.lower()].append(op.operation_unit(oper))   # set each operation and input path as operation_unit
         return (ml_instance_dict, train_oper_dict)
 
     # config reads the config file and config
     # Configuration item will be what you use. such as algorithm and data_transform...
     def get_run_instance_operation(self, cfg_fname=g_config_filename):
         ml_instance_dict = dict()
-        ml_name_list = []
+        ml_enable_list = []
         run_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list 
         config = cp.ConfigParser()
         config.read(cfg_fname)
@@ -77,14 +78,16 @@ class ML_Process :
             # when the machine learning written in config file doesn't exist, exception process is needed.
             except IndexError:
                 pass
+        print(ml_enable_list)
 
         # get run_operations assing func as according to their type
         run_operations_dict = config['Predict_Operations'] # key:first_ml ; value:I:"", T, O:"" ...
         for ml_order, run_operations_str in run_operations_dict.items():
-            run_operations_list = run_operations_str.replace(' ', '').split(',')
-            run_oper_dict[ml_order.lower()] = []
-            for oper in run_operations_list:
-                run_oper_dict[ml_order.lower()].append(op.operation_unit(oper))   # set each operation and input path as operation_unit
+            if ml_order in ml_enable_list:
+                run_operations_list = run_operations_str.replace(' ', '').split(',')
+                run_oper_dict[ml_order.lower()] = []
+                for oper in run_operations_list:
+                    run_oper_dict[ml_order.lower()].append(op.operation_unit(oper))   # set each operation and input path as operation_unit
         return (ml_instance_dict, run_oper_dict)
         '''
         predict_operations_list = config['predict_operations']['predict_operations'] \

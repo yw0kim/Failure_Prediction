@@ -47,7 +47,7 @@ max_iters = 1000
 trained_centroid_file = centriod.csv
 
 [2nd_ML]
-enable = true
+enable = false
 ml_name = ANN
 ml_dir = ANN
 num_nodes = "10,7"
