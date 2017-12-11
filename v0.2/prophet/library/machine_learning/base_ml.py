@@ -48,11 +48,12 @@ class Machine_Learning(ABC):
             ml.print_config(ml.ml_name, ml.arg_dict)
 
     @staticmethod
-    def set_config(self, arg_dict):
+    def set_config(self, section_num, arg_dict):
         for config in arg_dict:
             apply_config_string = 'self.' + config + '=arg_dict[\'' + config + '\']'
             exec(apply_config_string)
-  
+        self.ml_sequence_num = section_num
+
     @staticmethod
     def set_x(self, x):
         self.x = x
@@ -61,6 +62,6 @@ class Machine_Learning(ABC):
     def set_y(self, y):
         self.y = y
 
-    @staticmethod
-    def set_ml_sequence(self, ml_sequence):
-        self.ml_sequence = ml_sequence
+#    @staticmethod
+#    def set_ml_sequence(self, ml_sequence):
+#        self.ml_sequence = ml_sequence

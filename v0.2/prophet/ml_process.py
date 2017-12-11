@@ -19,7 +19,8 @@ class ML_Process :
 #        self.ml_name_list = []
 #        self.ml_instance_dict = dict()
 #        self.train_oper_dict = dict()   # key : first_ml, second_ml, .... value : operation unit list
-        self.predict_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list 
+#        self.predict_oper_dict = dict() # key : first_ml, second_ml, .... value : operation unit list
+        pass
 
     # config reads the config file and config
     # Configuration item will be what you use. such as algorithm and data_transform...
@@ -39,7 +40,7 @@ class ML_Process :
                 if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
                     ml_enable_list.append(section.lower())
                     ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
-                    ml_instance.set_config(ml_instance, arg_dict = entries)
+                    ml_instance.set_config(ml_instance, section_num = section[0], arg_dict = entries)         # set each config
                     ml_instance_dict[section.lower()] = ml_instance    # section.lower() = 1st_ML, 2nd_ML, ...
             # when the machine learning written in config file doesn't exist, exception process is needed.
             except IndexError:
@@ -73,7 +74,7 @@ class ML_Process :
                 if section.split('_')[1] == 'ML' and entries['enable'] == 'true':
                     # print(items['model_name'])
                     ml_instance = get_classes.class_dict[entries['ML_NAME']]()      # get class instance
-                    ml_instance.set_config(ml_instance, arg_dict = entries)
+                    ml_instance.set_config(ml_instance, section_num = section[0], arg_dict = entries)
                     ml_instance_dict[section.lower()] = ml_instance    # section.lower() = 1st_ml, 2nd_ml, ...
             # when the machine learning written in config file doesn't exist, exception process is needed.
             except IndexError:
